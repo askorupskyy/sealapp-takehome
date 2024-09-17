@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Contest {
+  id String @id @default(uuid()) @map("id")
+
+  title    String   @map("title")
+  deadline DateTime @map("deadline")
+
+  // the kid of whoever created this contest. will be used to authenticate users into the dashboard
+  author String @map("author")
+
+  // also keep track of these just in case...
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // the answer choices for each contest
+  choiceOptions ContestChoiceOption[]
+
+  @@map("contest")
+}
+
+model ContestChoiceOption {
+  id   Int    @id @default(autoincrement()) @map("id")
+  name String @map("name")
+
+  contestId String  @map("contest_id")
+  contest   Contest @relation(fields: [contestId], references: [id])
+
+  votes ContestVote[]
+
+  @@map("contest_choice_option")
+}
+
+model ContestVote {
+  id Int @id @default(autoincrement()) @map("id")
+
+  // we want to keep track of each user's `kid` who voted
+  author String @map("author")
+
+  choiceId Int                 @map("choice_id")
+  choice   ContestChoiceOption @relation(fields: [choiceId], references: [id])
+
+  @@map("contest_vote")
+}
