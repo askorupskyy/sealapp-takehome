@@ -34,7 +34,7 @@ export const contestRouter = new Hono()
   .post("/", zValidator("json", ContestCreateSchema), async (c) => {
     const contestData = c.req.valid("json");
 
-    await prisma.contest.create({
+    const contest = await prisma.contest.create({
       data: {
         author: "856508",
         title: contestData.title,
@@ -47,6 +47,7 @@ export const contestRouter = new Hono()
 
     return c.json({
       message: "Contest successfully created.",
+      contest,
     });
   })
 

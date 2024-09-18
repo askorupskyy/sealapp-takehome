@@ -86,7 +86,7 @@ contestUIRouter
       }
     }
 
-    if (contest.deadline > new Date()) {
+    if (contest.deadline < new Date()) {
       return c.res({
         image: <Positions contest={contest} />,
       });
