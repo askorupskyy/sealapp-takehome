@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
