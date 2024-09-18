@@ -49,6 +49,7 @@ contestUIRouter
         author: c.frameData.fid.toString(),
         choiceId: parseInt(choiceId),
       },
+      include: { choice: true },
     });
 
     if (!previousPosition) {
@@ -57,6 +58,17 @@ contestUIRouter
           author: c.frameData.fid.toString(),
           choiceId: parseInt(choiceId),
         },
+      });
+    }
+
+    if (previousPosition) {
+      return c.res({
+        image: (
+          <BlankResponse
+            message={`You already voted ${previousPosition.choice.name}`}
+          />
+        ),
+        intents: [<Button action="/show-positions">Show positions</Button>],
       });
     }
 
@@ -88,30 +100,9 @@ contestUIRouter
       });
     }
 
-    console.log(c.frameData);
-
-    // now we see if this user has already took a position in the contest
-    if (c.frameData?.fid) {
-      const previousPosition = await prisma.contestPosition.findFirst({
-        where: {
-          author: c.frameData.fid.toString(),
-          choice: { contestId: c.req.param("id") },
-        },
-        include: { choice: true },
-      });
-
-      // if they did, show their position....
-      if (previousPosition) {
-        return c.res({
-          image: (
-            <BlankResponse
-              message={`You already voted ${previousPosition.choice.name}`}
-            />
-          ),
-          intents: [<Button action="/show-positions">Show positions</Button>],
-        });
-      }
-    }
+    // i was not able to get the users `fid` here to show the message that the user already chose a position...
+    // so i made it work in a way that it says that after you choose your position
+    // seems like a `frog.fm` limitation
 
     if (contest.deadline < new Date()) {
       return c.res({
