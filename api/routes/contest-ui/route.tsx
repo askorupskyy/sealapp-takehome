@@ -17,6 +17,25 @@ const contestUIRouter = new Frog({
 });
 
 contestUIRouter
+  .frame("/show-positions", async (c) => {
+    const contestId = c.req.query("contestId");
+
+    const contest = await prisma.contest.findFirst({
+      where: { id: contestId },
+      include: { choiceOptions: { include: { positions: true } } },
+    });
+
+    if (!contest) {
+      return c.res({
+        image: <BlankResponse message="Contest not found" />,
+      });
+    }
+
+    return c.res({
+      image: <Positions contest={contest} />,
+    });
+  })
+
   .frame("/place-position", async (c) => {
     const { buttonValue: choiceId } = c;
     const contestId = c.req.query("contestId");
@@ -76,12 +95,17 @@ contestUIRouter
           author: c.frameData.fid.toString(),
           choice: { contestId: c.req.param("id") },
         },
+        include: { choice: true },
       });
 
-      // if they did, show positions....
+      // if they did, show their position....
       if (previousPosition) {
         return c.res({
-          image: <Positions contest={contest} />,
+          image: (
+            <BlankResponse
+              message={`You already voted ${previousPosition.choice.name}`}
+            />
+          ),
         });
       }
     }
@@ -89,6 +113,7 @@ contestUIRouter
     if (contest.deadline < new Date()) {
       return c.res({
         image: <Positions contest={contest} />,
+        intents: [<Button action="/show-positions">Show positions</Button>],
       });
     }
 

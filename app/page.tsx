@@ -1,3 +1,11 @@
+import { Layout } from "@/components/layout/layout";
+
 export default function Home() {
-  return <h1 className="text-lg text-red-500">Baba</h1>;
+  return (
+    <Layout>
+      <a className="underline text-lg" href="/contests/create">
+        Create contest
+      </a>
+    </Layout>
+  );
 }
