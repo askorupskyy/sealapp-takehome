@@ -20,16 +20,16 @@ CREATE TABLE "contest_choice_option" (
 );
 
 -- CreateTable
-CREATE TABLE "contest_vote" (
+CREATE TABLE "contest_position" (
     "id" SERIAL NOT NULL,
     "author" TEXT NOT NULL,
     "choice_id" INTEGER NOT NULL,
 
-    CONSTRAINT "contest_vote_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "contest_position_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey
 ALTER TABLE "contest_choice_option" ADD CONSTRAINT "contest_choice_option_contest_id_fkey" FOREIGN KEY ("contest_id") REFERENCES "contest"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "contest_vote" ADD CONSTRAINT "contest_vote_choice_id_fkey" FOREIGN KEY ("choice_id") REFERENCES "contest_choice_option"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "contest_position" ADD CONSTRAINT "contest_position_choice_id_fkey" FOREIGN KEY ("choice_id") REFERENCES "contest_choice_option"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

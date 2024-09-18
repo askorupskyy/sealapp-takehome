@@ -34,12 +34,12 @@ model ContestChoiceOption {
   contestId String  @map("contest_id")
   contest   Contest @relation(fields: [contestId], references: [id])
 
-  votes ContestVote[]
+  positions ContestPosition[]
 
   @@map("contest_choice_option")
 }
 
-model ContestVote {
+model ContestPosition {
   id Int @id @default(autoincrement()) @map("id")
 
   // we want to keep track of each user's `kid` who voted
@@ -48,5 +48,5 @@ model ContestVote {
   choiceId Int                 @map("choice_id")
   choice   ContestChoiceOption @relation(fields: [choiceId], references: [id])
 
-  @@map("contest_vote")
+  @@map("contest_position")
 }
