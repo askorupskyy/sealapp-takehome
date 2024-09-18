@@ -18,6 +18,6 @@ export const useContestForm = () =>
     defaultValues: {
       options: [{ name: "Yes" }, { name: "No" }],
       deadline: undefined,
-      title: "Your contest",
+      title: "",
     },
   });

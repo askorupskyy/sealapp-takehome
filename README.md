@@ -16,10 +16,9 @@
 
 ## Pages
 
-`/contests/create` -> to create new contests. No auth for now.
+`/` -> to create new contests. No auth for now.
 
-Unfortunately I was unable to get Farcaster Auth to work with Next 14, so this works for all users.
-I designed the DB in a way that would allow authors to see who voted what, but due to auth not working this was not possible.
+Initially the goal was to create a full dashboard where you can sign-in using your Farcaster Account to create you own contests and even change the way they look. Unfortunately I was not able to get Farcaster's AuthKit to work with Next 14, so we only have the creation page for now.
 
 ## Project structure
 

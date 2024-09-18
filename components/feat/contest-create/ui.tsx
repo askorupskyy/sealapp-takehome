@@ -12,6 +12,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
 import { type ContestFormType, useContestForm } from "./form";
 import {
   Popover,
@@ -28,10 +38,14 @@ import { ContestOption } from "./contest-option";
 import { ContestOptionAdd } from "./contest-option-add";
 
 import { client } from "@/lib/api/client";
+import { useState } from "react";
 
 export function ContestCreateForm() {
   const form = useContestForm();
   const options = form.watch("options");
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState<null | string>(null);
 
   const onSubmit = async (data: ContestFormType) => {
     const res = await client.api.contest.$post({ json: data });
@@ -41,9 +55,8 @@ export function ContestCreateForm() {
       alert(json.message);
     }
 
-    alert(
-      `Contest URL: ${process.env.APP_URL}/api/contest-ui/${json.contest.id}`
-    );
+    setCurrentUrl(`${process.env.APP_URL}/api/contest-ui/${json.contest.id}`);
+    setDialogOpen(true);
 
     form.reset();
   };
@@ -51,7 +64,7 @@ export function ContestCreateForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit, (e) =>
+        onSubmit={form.handleSubmit(onSubmit, () =>
           alert("Invalid form values.")
         )}
         className="space-y-8 max-w-[480px]"
@@ -82,7 +95,7 @@ export function ContestCreateForm() {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal bg-transparent",
+                        "pl-3 text-left font-normal bg-transparent",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -133,8 +146,38 @@ export function ContestCreateForm() {
             The options to choose from in your contest
           </FormDescription>
         </div>
-        <Button type="submit">Create</Button>
+        <div className="space-y-2">
+          <Button variant="primary" type="submit" className="w-full">
+            Create
+          </Button>
+          <p className="text-sm text-left text-zinc-500">
+            Your contest will become publicly avaiable once you click `Create`.
+            There is no way to delete the Contest.
+          </p>
+        </div>
       </form>
+
+      <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Contest Created Successfully</AlertDialogTitle>
+            <AlertDialogDescription>
+              You Contest URL is: {currentUrl}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              onClick={() => {
+                navigator.clipboard.writeText(currentUrl ?? "");
+                setCurrentUrl(null);
+                setDialogOpen(false);
+              }}
+            >
+              Copy and close
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 }

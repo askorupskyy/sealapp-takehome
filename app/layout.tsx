@@ -26,7 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "container bg-zinc-100")}>
+      <body
+        className={cn(inter.className, "bg-zinc-100 min-h-screen relative")}
+      >
         {children}
       </body>
     </html>
