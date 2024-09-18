@@ -98,6 +98,8 @@ contestUIRouter
         include: { choice: true },
       });
 
+      console.log(c.frameData, previousPosition);
+
       // if they did, show their position....
       if (previousPosition) {
         return c.res({
@@ -106,13 +108,14 @@ contestUIRouter
               message={`You already voted ${previousPosition.choice.name}`}
             />
           ),
+          intents: [<Button action="/show-positions">Show positions</Button>],
         });
       }
     }
 
     if (contest.deadline < new Date()) {
       return c.res({
-        image: <Positions contest={contest} />,
+        image: <BlankResponse message={`Contest is over`} />,
         intents: [<Button action="/show-positions">Show positions</Button>],
       });
     }
