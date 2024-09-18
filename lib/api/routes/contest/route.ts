@@ -1,11 +1,14 @@
-import { ContestQuerySchema, ContestCreateSchema } from "@/api/schemas/contest";
-import { UUIDSchema } from "@/api/schemas/shared";
+import {
+  ContestQuerySchema,
+  ContestCreateSchema,
+} from "@/lib/api/schemas/contest";
+import { UUIDSchema } from "@/lib/api/schemas/shared";
 
 import { Hono } from "hono";
 
 import { zValidator } from "@hono/zod-validator";
 
-import { prisma } from "@/api/db/index";
+import { prisma } from "@/lib/api/db/index";
 
 export const contestRouter = new Hono()
   .get("/", zValidator("query", ContestQuerySchema), async (c) => {

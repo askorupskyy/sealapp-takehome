@@ -26,7 +26,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { ContestOption } from "./contest-option";
 import { ContestOptionAdd } from "./contest-option-add";
-import { client } from "@/api/client";
+
+import { client } from "@/lib/api/client";
 
 export function ContestCreateForm() {
   const form = useContestForm();

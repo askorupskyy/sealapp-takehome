@@ -6,7 +6,7 @@ import { HTTPException } from "hono/http-exception";
 import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
 
-import { prisma } from "@/api/db";
+import { prisma } from "@/lib/api/db";
 
 import { BlankResponse } from "./components/blank-response";
 import { Positions } from "./components/positions";
