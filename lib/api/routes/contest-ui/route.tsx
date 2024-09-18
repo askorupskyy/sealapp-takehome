@@ -88,6 +88,8 @@ contestUIRouter
       });
     }
 
+    console.log(c.frameData);
+
     // now we see if this user has already took a position in the contest
     if (c.frameData?.fid) {
       const previousPosition = await prisma.contestPosition.findFirst({
@@ -97,8 +99,6 @@ contestUIRouter
         },
         include: { choice: true },
       });
-
-      console.log(c.frameData, previousPosition);
 
       // if they did, show their position....
       if (previousPosition) {
