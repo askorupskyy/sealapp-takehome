@@ -20,13 +20,10 @@ contestUIRouter
   .frame("/:contestId/show-positions", async (c) => {
     const contestId = c.req.param("contestId");
 
-    console.log("contest id:", contestId);
     const contest = await prisma.contest.findUnique({
       where: { id: contestId },
       include: { choiceOptions: { include: { positions: true } } },
     });
-
-    console.log(contest);
 
     if (!contest) {
       return c.res({
@@ -50,7 +47,7 @@ contestUIRouter
     const previousPosition = await prisma.contestPosition.findFirst({
       where: {
         author: c.frameData.fid.toString(),
-        choiceId: parseInt(choiceId),
+        choice: { contestId },
       },
       include: { choice: true },
     });
