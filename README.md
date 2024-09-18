@@ -25,14 +25,13 @@ I designed the DB in a way that would allow authors to see who voted what, but d
 
 ### API
 
-- /api/routes contains all of the api routes. this includes the ones that create the form
-- /api/schemas includes the schemas needed for creating the contests. i even made filtering schemas so that we could filter by creation date and etc. but this didn't work without auth.
-- /api/db prisma db instance
-- /api/client hono rpc client
+- /lib/api/routes contains all of the api routes. this includes the ones that create the form
+- /lib/api/schemas includes the schemas needed for creating the contests. i even made filtering schemas so that we could filter by creation date and etc. but this didn't work without auth.
+- /lib/api/db prisma db instance
+- /lib/api/client hono rpc client
 
 ## Components
 
 - /components/ui shadcn generated ui components
 - /components/feat has all of the feature components
 - /components/layout layout components
-

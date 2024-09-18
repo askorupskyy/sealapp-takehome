@@ -1,4 +1,4 @@
-import { app } from "@/api/routes/_main";
+import { app } from "@/lib/api/routes/_main";
 import { handle } from "hono/vercel";
 
 export const GET = handle(app);

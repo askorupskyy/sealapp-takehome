@@ -1,4 +1,4 @@
-import { contestUIRouter } from "@/api/routes/contest-ui";
+import { contestUIRouter } from "@/lib/api/routes/contest-ui";
 import { handle } from "frog/next";
 
 export const GET = handle(contestUIRouter);
