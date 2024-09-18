@@ -17,13 +17,16 @@ const contestUIRouter = new Frog({
 });
 
 contestUIRouter
-  .frame("/show-positions", async (c) => {
-    const contestId = c.req.query("contestId");
+  .frame("/:contestId/show-positions", async (c) => {
+    const contestId = c.req.param("contestId");
 
-    const contest = await prisma.contest.findFirst({
+    console.log("contest id:", contestId);
+    const contest = await prisma.contest.findUnique({
       where: { id: contestId },
       include: { choiceOptions: { include: { positions: true } } },
     });
+
+    console.log(contest);
 
     if (!contest) {
       return c.res({
@@ -36,9 +39,9 @@ contestUIRouter
     });
   })
 
-  .frame("/place-position", async (c) => {
+  .frame("/:contestId/place-position", async (c) => {
     const { buttonValue: choiceId } = c;
-    const contestId = c.req.query("contestId");
+    const contestId = c.req.param("contestId");
 
     if (!c.frameData?.fid || !choiceId) {
       throw new HTTPException(401, { message: "Unauthorized" });
@@ -63,12 +66,13 @@ contestUIRouter
 
     if (previousPosition) {
       return c.res({
+        action: `/${contestId}/show-positions`,
         image: (
           <BlankResponse
             message={`You already voted ${previousPosition.choice.name}`}
           />
         ),
-        intents: [<Button action="/show-positions">Show positions</Button>],
+        intents: [<Button>Show positions</Button>],
       });
     }
 
@@ -106,13 +110,14 @@ contestUIRouter
 
     if (contest.deadline < new Date()) {
       return c.res({
+        action: `/${contest.id}/show-positions`,
         image: <BlankResponse message={`Contest is over`} />,
-        intents: [<Button action="/show-positions">Show positions</Button>],
+        intents: [<Button>Show positions</Button>],
       });
     }
 
     return c.res({
-      action: `/place-position?contestId=${contest.id}`,
+      action: `/${contest.id}/place-position`,
       image: <BlankResponse message={contest.title} />,
       intents: contest.choiceOptions.map((option) => (
         <Button value={option.id.toString()}>{option.name}</Button>
